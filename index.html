@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanguritos — Diagrama flujo experiencia 2026</title>
+<style>
+/*
+  ═══════════════════════════════════════════
+  KANGURITOS — DIAGRAMA FLUJO EXPERIENCIA 2026
+  Proceso Comercial + Wolkvox + Pipedrive
+  ═══════════════════════════════════════════
+  CÓMO EDITAR:
+  1. Abre con Bloc de notas, VS Code o cualquier editor
+  2. Busca con Ctrl+F el texto que quieres cambiar
+  3. Guarda y abre en el navegador para ver cambios
+  ═══════════════════════════════════════════
+*/
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#f5f5f2;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#2a2a28;}
+
+/* ── Header ── */
+.main-header{background:#1e1e1e;padding:18px 24px 0;border-bottom:1px solid #333;}
+.main-header h1{font-size:16px;font-weight:600;color:#f0efea;margin-bottom:3px;letter-spacing:.2px;}
+.main-header p{font-size:10px;color:rgba(255,255,255,.38);margin-bottom:14px;}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;}
+.tab-btn{padding:9px 22px;font-size:12px;font-weight:600;border:none;border-radius:7px 7px 0 0;cursor:pointer;transition:all .18s;letter-spacing:.1px;}
+.tab-btn.active{background:#f5f5f2;color:#1a1a18;}
+.tab-btn:not(.active){background:rgba(255,255,255,.08);color:rgba(255,255,255,.42);}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.13);}
+
+/* ── Panels ── */
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* ── Sub-header ── */
+.sub-header{padding:12px 24px 10px;border-bottom:1px solid #e0dfd8;}
+.sub-header h2{font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:2px;}
+.sub-header p{font-size:10px;color:#888;}
+
+/* ── Sub-header tints ── */
+.sh-comercial{background:#f5f4f0;border-color:#d8d6cc;}
+.sh-wolkvox  {background:#f0eff8;border-color:#ccc9e8;}
+.sh-wolkvox h2{color:#1e1c38;}
+.sh-pipedrive{background:#eff4fa;border-color:#bacee8;}
+.sh-pipedrive h2{color:#101e30;}
+
+/* ══════════════════════════════════════
+   PROCESO COMERCIAL — estilos
+   ══════════════════════════════════════ */
+#panel-comercial{background:#f5f5f2;}
+.bp{padding:12px 14px 32px;}
+
+.lanes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.lane-hd{border-radius:7px;padding:7px 12px;border:1px solid;font-size:11px;font-weight:500;}
+.lh-client{background:#f5f5f2;border-color:#d0cfc8;color:#1a1a18;}
+.lh-team{background:#1e1e1e;border-color:#1e1e1e;color:#f0efea;}
+.lh-sub{font-size:9px;font-weight:400;margin-top:2px;opacity:.65;}
+
+.step-row{margin-bottom:5px;}
+.step-label{font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#999;margin-bottom:4px;padding-left:2px;}
+.step-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+.card{border-radius:8px;padding:8px 10px;border:1px solid #d8d7d0;background:#ffffff;cursor:pointer;transition:all .15s;}
+.card:hover{border-color:#a0a09a;background:#fafaf8;}
+.card.active{border-color:#1e1e1e;background:#f0eff8;}
+.card-title{font-size:10.5px;font-weight:600;color:#1a1a18;line-height:1.3;margin-bottom:3px;}
+.card-sub{font-size:9px;color:#666;line-height:1.4;}
+.card-tools{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px;}
+
+/* tool pills */
+.tool{font-size:8px;font-weight:600;padding:1px 6px;border-radius:5px;border:.5px solid #d0cfc8;background:#f5f5f2;color:#3a3a38;white-space:nowrap;}
+.tool.wk{background:#f0eff8;border-color:#ccc9e8;color:#2a2840;}
+.tool.pd{background:#eff4fa;border-color:#bacee8;color:#162840;}
+.tool.wp{background:#eff7f4;border-color:#c2ddd6;color:#1a3530;}
+.tool.tr{background:#faf4ef;border-color:#e0ccb8;color:#3a2810;}
+.tool.wa{background:#eff7f4;border-color:#c2ddd6;color:#1a3530;}
+.tool.gf{background:#f5f0f8;border-color:#d0b8e0;color:#2a1840;}
+.tool.em{background:#f5f5f2;border-color:#ccc9c0;color:#3a3830;}
+
+/* detail panel */
+.detail-panel{border-radius:10px;padding:14px 16px;border:1px solid #d0cfc8;background:#fafaf8;margin-bottom:10px;display:none;}
+.detail-panel.show{display:block;}
+.dp-title{font-size:13px;font-weight:600;color:#1a1a18;margin-bottom:6px;}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.dp-col-title{font-size:8.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#888;margin-bottom:5px;}
+.dp-item{font-size:9.5px;color:#444;padding:3px 0;border-bottom:.5px solid #e8e7e0;display:flex;align-items:baseline;gap:5px;line-height:1.4;}
+.dp-item:last-child{border:none;}
+.dp-dot{width:4px;height:4px;min-width:4px;border-radius:50%;background:#a0a09a;margin-top:5px;}
+.dp-tools-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;padding-top:8px;border-top:.5px solid #e0dfd8;}
+
+.connector{display:flex;justify-content:center;margin:2px 0;}
+.connector-line{width:1px;height:12px;background:#d0cfc8;}
+
+.phase-sep{display:flex;align-items:center;gap:8px;margin:12px 0 8px;}
+.phase-line{flex:1;height:.5px;background:#d8d7d0;}
+.phase-label{font-size:8.5px;font-weight:700;color:#888;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;padding:2px 10px;border:.5px solid #d0cfc8;border-radius:10px;background:#f5f5f2;}
+
+.note{font-size:9px;color:#999;font-style:italic;text-align:center;margin:2px 0 8px;}
+
+/* bifurcación rutas */
+.bifurc-wrap{margin:8px 0;}
+.bifurc-label{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#999;text-align:center;margin-bottom:6px;}
+.bifurc-grid{display:grid;gap:8px;}
+.bifurc-3{grid-template-columns:1fr 1fr 1fr;}
+.route-block{border-radius:10px;padding:10px 10px 8px;border:1px solid;}
+.rb-eventual{border-color:#bacee8;background:#f5f8fc;}
+.rb-mensual {border-color:#c0d8b0;background:#f4f8f2;}
+.rb-escuela  {border-color:#d0b8e0;background:#f7f3fa;}
+.route-title{font-size:8.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-bottom:6px;padding-bottom:5px;border-bottom:.5px solid;}
+.rt-ev {color:#162840;border-color:#bacee8;}
+.rt-men{color:#1e3010;border-color:#c0d8b0;}
+.rt-esc{color:#2a1840;border-color:#d0b8e0;}
+.r-step{margin-bottom:5px;}
+.r-step:last-child{margin-bottom:0;}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding-top:10px;border-top:.5px dashed #d8d7d0;}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:9px;color:#666;}
+
+/* ══════════════════════════════════════
+   WOLKVOX — estilos heredados + colores sobrios
+   ══════════════════════════════════════ */
+
+/*
+  ═══════════════════════════════════════════════════
+  KANGURITOS — FLUJO WHATSAPP / WOLKVOX
+  Versión: Mayo 2026
+  ═══════════════════════════════════════════════════
+  CÓMO EDITAR:
+  1. Abre con Bloc de notas, VS Code o cualquier editor de texto
+  2. Busca con Ctrl+F el texto que quieres cambiar
+  3. Edita directamente el texto entre las etiquetas HTML
+  4. Guarda y abre en el navegador para ver los cambios
+  ═══════════════════════════════════════════════════
+*/
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f9f9f7; font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; color: #333; }
+
+.doc-header { background: #EEEDFE; border-bottom: 2px solid #AFA9EC; padding: 16px 24px 12px; }
+.doc-header h1 { font-size: 17px; font-weight: 700; color: #3C3489; margin-bottom: 3px; }
+.doc-header p { font-size: 10px; color: #534AB7; }
+
+.wrap { padding: 12px 14px 40px; }
+
+/* ── Nodo base ── */
+.nd { border-radius: 9px; padding: 7px 10px; border: 0.5px solid; width: 100%; }
+.nt { font-size: 11px; font-weight: 700; line-height: 1.4; }
+.ns { font-size: 9.5px; font-weight: 400; line-height: 1.4; margin-top: 2px; opacity: 0.85; }
+
+/* ── Sección de opciones de menú ── */
+.opts { margin-top: 5px; border-top: 0.5px solid rgba(0,0,0,0.1); padding-top: 4px; }
+.opts-title { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.6; margin-bottom: 3px; }
+.opt-row { display: flex; align-items: flex-start; gap: 4px; margin-bottom: 2px; }
+.opt-dot { font-size: 10px; line-height: 1.3; flex-shrink: 0; }
+.opt-text { font-size: 9.5px; line-height: 1.3; }
+.opt-desc { font-size: 8.5px; opacity: 0.7; line-height: 1.3; }
+
+/* ── Link ── */
+.lnk { display: inline-flex; align-items: center; gap: 3px; font-size: 8.5px; font-weight: 600;
+  padding: 2px 6px; border-radius: 5px; margin-top: 3px; border: 0.5px solid;
+  background: #fff; color: #185FA5; border-color: #85B7EB; text-decoration: none; word-break: break-all; }
+.lnk::before { content: '🔗'; font-size: 9px; }
+
+/* ── Badges ── */
+.badges { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+.sk { font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 6px; border: 0.5px solid; white-space: nowrap; }
+.ac { font-size: 7.5px; font-weight: 600; padding: 1px 4px; border-radius: 5px; border: 0.5px solid; font-family: 'Courier New', monospace; white-space: nowrap; }
+
+/* ── Paleta nodos ── */
+.cg  { background: #F1EFE8; border-color: #B4B2A9; color: #444441; }
+.cp  { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; }
+.ct  { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+.cc  { background: #FAECE7; border-color: #F0997B; color: #712B13; }
+.cb  { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+.cgr { background: #EAF3DE; border-color: #97C459; color: #27500A; }
+.cam { background: #FAEEDA; border-color: #EF9F27; color: #633806; }
+.cpk { background: #FBEAF0; border-color: #ED93B1; color: #4B1528; }
+
+/* ── Skill badges ── */
+.s83 { background: #EEEDFE; color: #3C3489; border-color: #AFA9EC; }
+.s46 { background: #FAEEDA; color: #633806; border-color: #EF9F27; }
+.s26 { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+.s28 { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+.s31 { background: #EAF3DE; color: #27500A; border-color: #97C459; }
+.s43 { background: #FAECE7; color: #712B13; border-color: #F0997B; }
+.s25 { background: #F1EFE8; color: #444441; border-color: #B4B2A9; }
+.s53 { background: #FBEAF0; color: #4B1528; border-color: #ED93B1; }
+
+/* ── Códigos actividad ── */
+.ao   { background: #F1EFE8; color: #444441; border-color: #B4B2A9; }
+.ah   { background: #EEEDFE; color: #3C3489; border-color: #7F77DD; }
+.aa   { background: #FAECE7; color: #712B13; border-color: #F0997B; }
+.ac2  { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; }
+.as   { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+.ak   { background: #EAF3DE; color: #27500A; border-color: #97C459; }
+.ae   { background: #FAEEDA; color: #633806; border-color: #EF9F27; }
+.acamp{ background: #FBEAF0; color: #4B1528; border-color: #ED93B1; }
+
+/* ── Layout ── */
+.col { display: flex; flex-direction: column; align-items: center; }
+.row { display: flex; flex-direction: row; align-items: flex-start; gap: 8px; width: 100%; }
+.dn  { width: 1px; height: 14px; background: #ccc; margin: 0 auto; }
+.dl  { font-size: 8px; color: #aaa; text-align: center; display: block; margin: 0 auto 1px; }
+.sep { width: 100%; border: none; border-top: 1px dashed #ddd; margin: 12px 0 4px; }
+.sec { font-size: 8px; color: #888; text-align: center; margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase; font-weight: 700; }
+
+@media print {
+  body { background: white; font-size: 10px; }
+  .doc-header { padding: 10px 14px; }
+}
+
+
+/* SOBRIO COLOR SYSTEM — tints muy suaves, solo para facilitar lectura */
+/* Bot / detección */
+.cp { background: #f0eff8; border-color: #ccc9e8; color: #2a2840; }
+.cp .nt { color: #1e1c38; }
+.cp .ns { color: #5a5878; }
+
+/* Mensajes / opciones al usuario */
+.ct { background: #eff7f4; border-color: #c2ddd6; color: #1a3530; }
+.ct .nt { color: #152e2a; }
+.ct .ns { color: #3a5a55; }
+
+/* Acción clave / formulario */
+.cc { background: #faf4ef; border-color: #e0ccb8; color: #3a2810; }
+.cc .nt { color: #2e1e08; }
+.cc .ns { color: #6a4828; }
+
+/* Transfer a asesora */
+.cb { background: #eff4fa; border-color: #bacee8; color: #162840; }
+.cb .nt { color: #101e30; }
+.cb .ns { color: #3a5070; }
+
+/* Niñeras / candidatas */
+.cgr { background: #f1f7ec; border-color: #c0d8b0; color: #1e3010; }
+.cgr .nt { color: #162408; }
+.cgr .ns { color: #3e5828; }
+
+/* Fuera de horario / escuela */
+.cam { background: #faf6ec; border-color: #ddd0a8; color: #352808; }
+.cam .nt { color: #281e04; }
+.cam .ns { color: #5a4818; }
+
+/* Campañas digitales */
+.cpk { background: #faf0f4; border-color: #e0bece; color: #381828; }
+.cpk .nt { color: #2a1020; }
+.cpk .ns { color: #5a3848; }
+
+/* Inicio / fin — gris cálido */
+.cg { background: #f5f4f0; border-color: #ccc9c0; color: #2a2820; }
+.cg .nt { color: #1e1c18; }
+.cg .ns { color: #5a5848; }
+
+/* Skill badges — gris neutro suave */
+.s83,.s46,.s26,.s28,.s31,.s43,.s25,.s53 {
+  background: #f0efea; color: #3a3830; border-color: #ccc9c0;
+}
+/* OPC-Menu badges — gris suave */
+.ao { background: #f0efea; color: #3a3830; border-color: #c8c5bc; }
+.ah { background: #f0eff8; color: #2a2840; border-color: #ccc9e8; }
+.aa { background: #faf4ef; color: #3a2810; border-color: #e0ccb8; }
+.ac2{ background: #eff4fa; color: #162840; border-color: #bacee8; }
+.as { background: #eff7f4; color: #1a3530; border-color: #c2ddd6; }
+.ak { background: #f1f7ec; color: #1e3010; border-color: #c0d8b0; }
+.ae { background: #faf6ec; color: #352808; border-color: #ddd0a8; }
+.acamp{ background: #faf0f4; color: #381828; border-color: #e0bece; }
+
+/* links */
+.lnk { background: #f5f4f0; color: #1e3050; border-color: #bacee8; }
+/* connectors */
+.dn { background: #ccc9c0; }
+/* separators */
+.sep { border-top-color: #dddad0; }
+
+#panel-wolkvox{background:#f5f5f2;}
+#panel-wolkvox .wrap{padding:12px 14px 40px;}
+
+/* ══════════════════════════════════════
+   PIPEDRIVE — estilos
+   ══════════════════════════════════════ */
+#panel-pipedrive{background:#f5f5f2;}
+.pd-wrap{padding:12px 14px 40px;}
+.pd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;margin-bottom:14px;}
+.pipe-btn{border-radius:8px;padding:10px 12px;border:1px solid #d0cfc8;cursor:pointer;transition:all .15s;text-align:left;background:#ffffff;color:#1a1a18;}
+.pipe-btn:hover{background:#f0efea;border-color:#b8b7b0;}
+.pipe-btn.active{background:#1e1e1e;color:#f0efea;border-color:#1e1e1e;}
+.pipe-btn.active .pipe-meta{color:rgba(255,255,255,.5);}
+.pipe-name{font-size:11px;font-weight:600;line-height:1.3;}
+.pipe-meta{font-size:9.5px;color:#888;margin-top:2px;}
+.pd-detail{border-radius:10px;padding:14px 16px;border:1px solid #d8d7d0;background:#ffffff;margin-bottom:14px;display:none;}
+.pd-detail.show{display:block;}
+.det-header{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;}
+.det-title{font-size:15px;font-weight:600;color:#1a1a18;}
+.det-sub{font-size:10px;color:#888;}
+.stages{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.stage{border-radius:6px;padding:4px 9px;border:1px solid #d0cfc8;font-size:10px;font-weight:500;background:#f7f7f5;color:#1a1a18;display:flex;align-items:center;gap:5px;}
+.stage-num{font-size:8px;color:#aaa;font-weight:400;}
+.pd-sep{width:100%;border:none;border-top:1px dashed #e0dfd8;margin:10px 0;}
+.pd-sec{font-size:8px;color:#aaa;text-align:center;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase;font-weight:600;}
+.fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;}
+.field-row{font-size:9.5px;color:#555;padding:4px 8px;border-radius:5px;background:#f5f5f2;display:flex;justify-content:space-between;gap:6px;border:.5px solid #e0dfd8;}
+.field-name{font-weight:600;color:#1a1a18;}
+.field-type{color:#999;font-size:8.5px;text-align:right;}
+.acts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:5px;}
+.act{border-radius:7px;padding:5px 8px;border:.5px solid #d8d7d0;background:#f7f7f5;font-size:9.5px;color:#555;}
+.act-name{font-weight:600;color:#1a1a18;font-size:10px;display:block;margin-bottom:1px;}
+.lost-reasons{margin-top:6px;}
+.lr-item{font-size:9px;color:#666;padding:3px 0;border-bottom:.5px solid #e8e7e0;}
+.lr-item:last-child{border:none;}
+.info-box{border-radius:8px;padding:9px 12px;background:#f5f5f2;border:.5px solid #d8d7d0;font-size:10px;color:#444;line-height:1.5;}
+.foot{font-size:9px;color:#bbb;text-align:center;margin-top:20px;}
+
+@media print{
+  .main-header{display:none;}
+  .panel{display:block!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="main-header">
+  <h1>Kanguritos — Diagrama flujo experiencia 2026</h1>
+  <p>Proceso comercial · Wolkvox (bot WhatsApp) · Pipedrive (CRM) · Entrenamiento asistente digital</p>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('comercial',this)">Proceso comercial</button>
+    <button class="tab-btn" onclick="switchTab('wolkvox',this)">Wolkvox — Flujo WhatsApp</button>
+    <button class="tab-btn" onclick="switchTab('pipedrive',this)">Pipedrive — Estructura CRM</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL 1 · PROCESO COMERCIAL
+     ══════════════════════════════════════ -->
+<div id="panel-comercial" class="panel active">
+  <div class="sub-header sh-comercial">
+    <h2>Proceso comercial — Service blueprint</h2>
+    <p>Carril cliente + carril interno · Desde primer contacto hasta inicio del servicio · Haz clic en cualquier tarjeta para ver el detalle</p>
+  </div>
+  <div class="bp">
+
+  <div class="lanes">
+    <div class="lane-hd lh-client">Carril cliente — familia<div class="lh-sub">Lo que vive, hace y recibe la familia</div></div>
+    <div class="lane-hd lh-team">Carril Kanguritos — comercial<div class="lh-sub">Lo que hace el equipo interno por detrás</div></div>
+  </div>
+
+  <div id="detail" class="detail-panel">
+    <div class="dp-title" id="dp-title"></div>
+    <div class="dp-grid">
+      <div><div class="dp-col-title">Carril cliente</div><div id="dp-client"></div></div>
+      <div><div class="dp-col-title">Carril Kanguritos</div><div id="dp-team"></div></div>
+    </div>
+    <div class="dp-tools-row" id="dp-tools"></div>
+  </div>
+
+  <!-- FASE 1 -->
+  <div class="phase-sep"><div class="phase-line"></div><span class="phase-label">Fase 1 · Captación</span><div class="phase-line"></div></div>
+
+  <div class="step-row">
+    <div class="step-label">1 · Primer contacto</div>
+    <div class="step-grid">
+      <div class="card" onclick="sd('s1')"><div class="card-title">La familia escribe por WhatsApp</div><div class="card-sub">Llega por pauta, referido, Google o redes. El bot la saluda, solicita TDP y muestra el menú principal.</div><div class="card-tools"><span class="tool wa">WhatsApp</span><span class="tool wk">Wolkvox bot</span></div></div>
+      <div class="card" onclick="sd('s1')"><div class="card-title">Bot detecta intención y deriva</div><div class="card-sub">Identifica fuente (pauta, referido, orgánico), registra OPC-Menu y transfiere a la asesora según skill.</div><div class="card-tools"><span class="tool wk">Wolkvox</span><span class="tool pd">Pipedrive — crea persona</span></div></div>
+    </div>
+  </div>
+  <div class="connector"><div class="connector-line"></div></div>
+  <div class="step-row">
+    <div class="step-label">2 · Exploración del servicio</div>
+    <div class="step-grid">
+      <div class="card" onclick="sd('s2')"><div class="card-title">Explora el portafolio de servicios</div><div class="card-sub">Ve catálogos con links, elige tipo de servicio. Puede ir directo con la asesora o continuar en el bot.</div><div class="card-tools"><span class="tool wa">WhatsApp</span><span class="tool wk">Wolkvox bot</span></div></div>
+      <div class="card" onclick="sd('s2')"><div class="card-title">Bot filtra o asesora atiende</div><div class="card-sub">Si elige asesor: transfer directo. Si navega el bot: registra tipo y modalidad antes de transferir.</div><div class="card-tools"><span class="tool wk">Wolkvox — Skill 4083</span><span class="tool pd">Pipedrive — Prospecto</span></div></div>
+    </div>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="phase-sep"><div class="phase-line"></div><span class="phase-label">Fase 2 · Cotización</span><div class="phase-line"></div></div>
+  <div class="note">La cotización ocurre por dos vías según lo que elija el cliente</div>
+
+  <div class="step-row">
+    <div class="step-label">3A · Cotización directa con asesora (conversación)</div>
+    <div class="step-grid">
+      <div class="card" onclick="sd('s3')"><div class="card-title">Habla con la asesora en WhatsApp</div><div class="card-sub">La asesora le hace preguntas, entiende la necesidad y le da la cotización en el momento, sin formulario.</div><div class="card-tools"><span class="tool wa">WhatsApp</span></div></div>
+      <div class="card" onclick="sd('s3')"><div class="card-title">Asesora cotiza en la conversación</div><div class="card-sub">Recoge datos, calcula tarifa, comparte cotización. Registra todo en el deal de Pipedrive.</div><div class="card-tools"><span class="tool wa">WhatsApp</span><span class="tool pd">Pipedrive — Cotización</span></div></div>
+    </div>
+  </div>
+  <div class="connector"><div class="connector-line"></div></div>
+  <div class="step-row">
+    <div class="step-label">3B · Cotización vía formulario (si prefiere no hablar con asesora)</div>
+    <div class="step-grid">
+      <div class="card" onclick="sd('s3b')"><div class="card-title">Completa el formulario de cotización</div><div class="card-sub">Recibe link por WhatsApp. Diligencia fechas, horario, edades, dirección y cómo se enteró.</div><div class="card-tools"><span class="tool gf">Google Forms</span><span class="tool wa">WhatsApp</span></div></div>
+      <div class="card" onclick="sd('s3b')"><div class="card-title">Asesora recibe datos y cotiza</div><div class="card-sub">Datos llegan por integración a Pipedrive. Asesora completa el deal y envía la cotización por WhatsApp.</div><div class="card-tools"><span class="tool gf">Google Forms</span><span class="tool pd">Pipedrive — campos deal</span></div></div>
+    </div>
+  </div>
+  <div class="connector"><div class="connector-line"></div></div>
+  <div class="step-row">
+    <div class="step-label">4 · Seguimiento de cotización</div>
+    <div class="step-grid">
+      <div class="card" onclick="sd('s4')"><div class="card-title">Evalúa y decide si acepta</div><div class="card-sub">Revisa la propuesta, puede preguntar o negociar. Si acepta, avanza al cierre según el tipo de servicio.</div><div class="card-tools"><span class="tool wa">WhatsApp</span></div></div>
+      <div class="card" onclick="sd('s4')"><div class="card-title">Asesora hace seguimiento activo</div><div class="card-sub">Mueve deal a "Seguimiento cotización". Si hay inactividad, Wolkvox dispara cierre automático.</div><div class="card-tools"><span class="tool pd">Pipedrive — Seg. Cotización</span><span class="tool wk">Wolkvox — inactividad</span></div></div>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="phase-sep"><div class="phase-line"></div><span class="phase-label">Fase 3 · Cierre — tres rutas según tipo de servicio</span><div class="phase-line"></div></div>
+  <div class="bifurc-wrap">
+    <div class="bifurc-label">El flujo se divide según el tipo de servicio que contrató la familia</div>
+    <div class="bifurc-grid bifurc-3">
+
+      <div class="route-block rb-eventual">
+        <div class="route-title rt-ev">Ruta A · Eventuales (por horas)</div>
+        <div class="r-step"><div class="card" onclick="sd('ev1')"><div class="card-title">Confirma el turno</div><div class="card-sub">Acepta la tarifa. Confirma fecha, hora y duración. Sin contrato ni suscripción.</div><div class="card-tools"><span class="tool wa">WhatsApp</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('ev2')"><div class="card-title">Paga por link Wompi</div><div class="card-sub">Recibe link y paga con tarjeta. Sin débito automático. Cada turno paga por separado.</div><div class="card-tools"><span class="tool wp">Wompi</span><span class="tool wa">WhatsApp</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('ev3')"><div class="card-title">Se presta el servicio</div><div class="card-sub">Se asigna la kangurita disponible. Sin entrevista previa. El turno se realiza en la fecha pactada.</div><div class="card-tools"><span class="tool pd">Pipedrive — Logística Eventuales</span></div></div></div>
+      </div>
+
+      <div class="route-block rb-mensual">
+        <div class="route-title rt-men">Ruta B · Mensualidad / T. fijo</div>
+        <div class="r-step"><div class="card" onclick="sd('men1')"><div class="card-title">Firma el contrato</div><div class="card-sub">Recibe contrato por WhatsApp o correo. Lo firma y lo devuelve.</div><div class="card-tools"><span class="tool wa">WhatsApp</span><span class="tool em">Correo</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('men2')"><div class="card-title">Entrevista con 1–2 kanguritas</div><div class="card-sub">Coordinadora presenta candidatas disponibles. La familia elige la que hace match.</div><div class="card-tools"><span class="tool wa">WhatsApp</span><span class="tool pd">Pipedrive — Logística Mensualidad</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('men3')"><div class="card-title">Paga mensualidad anticipada</div><div class="card-sub">Una vez aprobada la kangurita, paga. Registra tarjeta para débito automático mensual.</div><div class="card-tools"><span class="tool wp">Wompi</span><span class="tool tr">Treli — suscripción</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('men4')"><div class="card-title">Inicia el servicio</div><div class="card-sub">La kangurita aprobada comienza. Período de adaptación. Seguimiento pedagógico mensual.</div><div class="card-tools"><span class="tool pd">Pipedrive — Pedagogía</span><span class="tool wa">WhatsApp</span></div></div></div>
+      </div>
+
+      <div class="route-block rb-escuela">
+        <div class="route-title rt-esc">Ruta C · Escuela y recreación</div>
+        <div class="r-step"><div class="card" onclick="sd('esc1')"><div class="card-title">Ve info y habla con asesora</div><div class="card-sub">Después de ver los links de la Escuela, la asesora le cotiza según el programa o servicio que necesita.</div><div class="card-tools"><span class="tool wa">WhatsApp</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('esc2')"><div class="card-title">Recibe cotización de la asesora</div><div class="card-sub">Precios, fechas, modalidad y requisitos según el programa elegido.</div><div class="card-tools"><span class="tool wa">WhatsApp</span><span class="tool pd">Pipedrive — Escuela Ventas</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('esc3')"><div class="card-title">Paga y se inscribe</div><div class="card-sub">Pago por Wompi. Sin débito automático. Queda inscrita en el programa o evento.</div><div class="card-tools"><span class="tool wp">Wompi</span><span class="tool pd">Pipedrive — Escuela Operación</span></div></div></div>
+        <div class="connector"><div class="connector-line"></div></div>
+        <div class="r-step"><div class="card" onclick="sd('esc4')"><div class="card-title">Se presta el servicio</div><div class="card-sub">Inicia el programa técnico, asesoría, capacitación o evento de recreación.</div><div class="card-tools"><span class="tool pd">Pipedrive — Escuela Operación</span></div></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="leg-item"><span class="tool wk">Wolkvox</span>Bot y colas de atención</span>
+    <span class="leg-item"><span class="tool pd">Pipedrive</span>CRM y pipelines</span>
+    <span class="leg-item"><span class="tool wa">WhatsApp</span>Canal de comunicación</span>
+    <span class="leg-item"><span class="tool wp">Wompi</span>Pasarela de pago</span>
+    <span class="leg-item"><span class="tool tr">Treli</span>Débito automático mensual</span>
+    <span class="leg-item"><span class="tool gf">Google Forms</span>Formulario cotización</span>
+    <span class="leg-item"><span class="tool em">Correo</span>Email</span>
+  </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL 2 · WOLKVOX
+     ══════════════════════════════════════ -->
+<div id="panel-wolkvox" class="panel">
+  <div class="sub-header sh-wolkvox">
+    <h2>Flujo WhatsApp — Wolkvox</h2>
+    <p>Bot conversacional · Menús interactivos · Códigos de actividad (OPC-Menu) · Skills de transferencia</p>
+  </div>
+  <div class="wrap">
+
+<!-- ══════════ TRONCO PRINCIPAL ══════════ -->
+<div class="col">
+
+  <div class="nd cg" style="max-width:240px;text-align:center;">
+    <div class="nt">💬 Mensaje entrante WhatsApp</div>
+  </div>
+  <div class="dn"></div>
+
+  <div class="nd cp" style="max-width:480px;text-align:center;">
+    <div class="nt">Detección de intención inicial</div>
+    <div class="ns">El bot reconoce palabras clave antes de cualquier otro paso</div>
+    <div class="badges">
+      <span class="ac acamp">Campanas_Whatsapp</span>
+      <span class="ac acamp">Pauta_Digital</span>
+      <span class="ac acamp">Seguimiento_pipe_agente</span>
+      <span class="ac acamp">Seguimiento_pipe_kanguritas_agente</span>
+      <span class="ac acamp">Seguimiento_pipe_candidatas_agente</span>
+      <span class="ac acamp">Seguimiento_pipe_proceso_seleccion_respuesta</span>
+    </div>
+  </div>
+  <div class="dn"></div>
+
+  <div class="nd ct" style="max-width:400px;text-align:center;">
+    <div class="nt">Saludo + Autorización de datos (TDP)</div>
+    <div class="ns">En Kanguritos llevamos más de 14 años cuidando y educando con propósito 💛</div>
+    <a class="lnk" href="https://bit.ly/PoliticaDatosKanguritos">bit.ly/PoliticaDatosKanguritos</a>
+    <div class="opts">
+      <div class="opts-title">Opciones al usuario</div>
+      <div class="opt-row"><span class="opt-dot">✅</span><div><span class="opt-text">Autorizo</span></div></div>
+      <div class="opt-row"><span class="opt-dot">❌</span><div><span class="opt-text">No autorizo</span></div></div>
+    </div>
+    <div class="badges">
+      <span class="ac ao">TDP_Acepta</span>
+      <span class="ac ao">TDP_Rechaza</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ BIFURCACIÓN TDP ══════════ -->
+<div class="row" style="margin-top:0;align-items:flex-start;">
+
+  <!-- NO AUTORIZA -->
+  <div class="col" style="flex:0 0 165px;">
+    <span class="dl">↙ No autoriza</span>
+    <div class="dn"></div>
+    <div class="nd cc" style="width:165px;">
+      <div class="nt">Cierre por privacidad</div>
+      <div class="ns">Respetamos tu decisión · Fin del chat</div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cg" style="width:90px;text-align:center;"><div class="nt">FIN</div></div>
+  </div>
+
+  <!-- AUTORIZA -->
+  <div class="col" style="flex:1;align-items:center;">
+    <span class="dl">↓ Autoriza</span>
+    <div class="dn"></div>
+    <div class="nd cp" style="max-width:420px;text-align:center;">
+      <div class="nt">Control de horario</div>
+      <div class="ns">Lun–Vie 6:00–19:00 · Sáb 8:00–14:00 · Festivos especiales · GMT Bogotá</div>
+      <div class="badges">
+        <span class="ac ah">Horario_On</span>
+        <span class="ac ah">Horario_Off</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ BIFURCACIÓN HORARIO ══════════ -->
+<div class="row" style="margin-top:6px;align-items:flex-start;gap:12px;">
+
+  <!-- ▓▓▓ FUERA DE HORARIO ▓▓▓ -->
+  <div class="col" style="flex:0 0 200px;">
+    <span class="dl">↙ Fuera de horario</span>
+    <div class="dn"></div>
+
+    <div class="nd cam" style="width:200px;">
+      <div class="nt">Mensaje fuera de horario</div>
+      <div class="ns">Lun–Vie 6am–8pm · Sáb 8am–3pm · Dom y festivos 7–10am y 5–8pm</div>
+    </div>
+    <div class="dn"></div>
+
+    <div class="nd cam" style="width:200px;">
+      <div class="nt">Opciones automáticas (off)</div>
+      <div class="opts">
+        <div class="opts-title">Opciones al usuario</div>
+        <div class="opt-row"><span class="opt-dot">📋</span><div><span class="opt-text">Ver servicios</span></div></div>
+        <div class="opt-row"><span class="opt-dot">📞</span><div><span class="opt-text">Te contactamos</span></div></div>
+        <div class="opt-row"><span class="opt-dot">💼</span><div><span class="opt-text">Trabajar en Kangu</span></div></div>
+      </div>
+      <div class="badges">
+        <span class="ac ah">Horario_Off_Servicios</span>
+        <span class="ac ah">Horario_Off_Contacto</span>
+        <span class="ac ah">Horario_Off_Trabajar</span>
+      </div>
+    </div>
+    <div class="dn"></div>
+
+    <!-- Servicios off -->
+    <div class="nd ct" style="width:200px;">
+      <div class="nt">Ver servicios (off)</div>
+      <div class="opts">
+        <div class="opts-title">Opciones</div>
+        <div class="opt-row"><span class="opt-dot">📦</span><div><span class="opt-text">Todos los servicios</span><div class="opt-desc">Descubre todo lo que podemos hacer por ti</div></div></div>
+        <div class="opt-row"><span class="opt-dot">👶</span><div><span class="opt-text">Cuidado infantil</span><div class="opt-desc">Niñeras por horas, mensualidad o recreación</div></div></div>
+        <div class="opt-row"><span class="opt-dot">🎓</span><div><span class="opt-text">Escuela de formación</span><div class="opt-desc">Asesorías, capacitaciones y técnico laboral</div></div></div>
+      </div>
+      <div class="badges">
+        <span class="ac as">Servicios_Off_Todos</span>
+        <span class="ac as">Servicios_Off_CuidadoInfantil</span>
+        <span class="ac as">Servicios_Off_Escuela</span>
+      </div>
+      <div style="margin-top:4px;">
+        <a class="lnk" href="https://bit.ly/ServiciosKanguritos2026">bit.ly/ServiciosKanguritos2026</a>
+        <a class="lnk" href="https://bit.ly/CuidadoInfantilKanguritos2026">bit.ly/CuidadoInfantilKanguritos2026</a>
+        <a class="lnk" href="https://bit.ly/EscuelaKanguritos">bit.ly/EscuelaKanguritos</a>
+      </div>
+    </div>
+    <div class="dn"></div>
+
+    <div class="nd cc" style="width:200px;">
+      <div class="nt">Cotizar (off)</div>
+      <a class="lnk" href="https://forms.gle/eCojDJrfXR3rvf147">forms.gle/eCojDJrfXR3rvf147</a>
+      <div class="badges">
+        <span class="ac as">Servicios_Off_Cotizar</span>
+        <span class="sk s46">Skill 4046</span>
+      </div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cb" style="width:200px;">
+      <div class="nt">Te contactamos</div>
+      <a class="lnk" href="https://bit.ly/TeContactamosKanguritos">bit.ly/TeContactamosKanguritos</a>
+      <div class="badges">
+        <span class="ac as">Servicios_Off_Contacto</span>
+        <span class="sk s46">Skill 4046</span>
+      </div>
+    </div>
+    <div class="dn"></div>
+
+    <div class="nd cgr" style="width:200px;">
+      <div class="nt">Trabajar en Kangu (off)</div>
+      <div class="ns">¡Únete a nuestro equipo! Perfiles: 23–51 años</div>
+      <div class="opts">
+        <div class="opts-title">Perfiles que buscamos</div>
+        <div class="opt-row"><span class="opt-dot">1️⃣</span><div><span class="opt-text">Perfil 1: Con título</span><div class="opt-desc">Título en primera infancia · mín. 2 años exp.</div></div></div>
+        <div class="opt-row"><span class="opt-dot">2️⃣</span><div><span class="opt-text">Perfil 2: Sin título</span><div class="opt-desc">Mín. 1 año exp. como niñera y labores domésticas</div></div></div>
+      </div>
+      <div class="ns" style="margin-top:5px;">📧 Aplica enviando tu hoja de vida a:</div>
+      <div style="font-size:9.5px;font-weight:700;color:#27500A;margin-top:2px;word-break:break-all;">hojasdevida@kanguritos.co</div>
+      <div class="badges" style="margin-top:4px;"><span class="ac ak">Sin transfer — respuesta directa por email</span></div>
+    </div>
+
+  </div><!-- /fuera de horario -->
+
+  <!-- ▓▓▓ EN HORARIO ▓▓▓ -->
+  <div class="col" style="flex:1;align-items:center;">
+    <span class="dl">↓ En horario</span>
+    <div class="dn"></div>
+
+    <!-- MENÚ PRINCIPAL -->
+    <div class="nd ct" style="max-width:100%;">
+      <div class="nt">Menú principal (en horario)</div>
+      <div class="ns">En Kanguritos llevamos más de 14 años cuidando y educando con propósito 💛</div>
+      <div class="opts">
+        <div class="opts-title">Opciones — Sección "Servicios"</div>
+        <div class="opt-row"><span class="opt-dot">📅</span><div><span class="opt-text">Agendar servicio</span><div class="opt-desc">Haz tu reserva en segundos: fácil, rápido y a tu medida</div></div></div>
+        <div class="opt-row"><span class="opt-dot">📋</span><div><span class="opt-text">Ver nuestros servicios</span><div class="opt-desc">Descubre todo lo que podemos hacer por ti y tu familia</div></div></div>
+        <div class="opts-title" style="margin-top:4px;">Sección "Clientes y comunidad"</div>
+        <div class="opt-row"><span class="opt-dot">👤</span><div><span class="opt-text">Soy cliente</span><div class="opt-desc">Ya tengo un servicio activo o agendado</div></div></div>
+        <div class="opt-row"><span class="opt-dot">👩</span><div><span class="opt-text">Soy niñera</span><div class="opt-desc">Formo parte de Kanguritos o quiero trabajar como niñera</div></div></div>
+        <div class="opt-row"><span class="opt-dot">🎓</span><div><span class="opt-text">Soy estudiante</span><div class="opt-desc">Estoy inscrita en la escuela o quiero formarme con ustedes</div></div></div>
+      </div>
+      <div class="badges">
+        <span class="ac ah">Horario_On_Agendar</span>
+        <span class="ac ah">Horario_On_Servicios</span>
+        <span class="ac ah">Horario_On_Cliente</span>
+        <span class="ac ah">Horario_On_Ninera</span>
+        <span class="ac ah">Horario_On_Estudiante</span>
+      </div>
+    </div>
+    <div class="dn"></div>
+
+    <!-- ════ RAMA 1: AGENDAR ════ -->
+    <div class="sep"></div>
+    <div class="sec">Rama 1 · Agendar servicio</div>
+    <div class="row" style="align-items:flex-start;gap:6px;">
+      <div class="col" style="flex:1;">
+
+        <div class="nd ct" style="width:100%;">
+          <div class="nt">Tipo de servicio</div>
+          <div class="ns">$cust_name, ¡Comencemos con conocer tu necesidad para agendar el servicio ideal!</div>
+          <div class="opts">
+            <div class="opts-title">Sección "Cuidado Infantil"</div>
+            <div class="opt-row"><span class="opt-dot">🦘</span><div><span class="opt-text">Kanguritos</span><div class="opt-desc">Cuidado infantil especializado con juegos, rutinas y aprendizaje</div></div></div>
+            <div class="opt-row"><span class="opt-dot">🏠</span><div><span class="opt-text">Tin Marín</span><div class="opt-desc">Apoyo en el cuidado infantil y labores domésticas</div></div></div>
+            <div class="opts-title" style="margin-top:4px;">Sección "Contacto"</div>
+            <div class="opt-row"><span class="opt-dot">💬</span><div><span class="opt-text">Hablar con asesor</span><div class="opt-desc">¿No sabes qué opción elegir? Te ayudamos</div></div></div>
+            <div class="opt-row"><span class="opt-dot">↩️</span><div><span class="opt-text">Menú principal</span><div class="opt-desc">Regresar al menú principal</div></div></div>
+          </div>
+          <div class="badges">
+            <span class="ac aa">Agendar_Kanguritos</span>
+            <span class="ac aa">Agendar_TinMarin</span>
+            <span class="ac aa">Agendar_Asesor</span>
+          </div>
+        </div>
+        <div class="dn"></div>
+
+        <div class="nd cp" style="width:100%;">
+          <div class="nt">Modalidad</div>
+          <div class="ns">Selecciona el tipo de servicio que deseas agendar:</div>
+          <div class="opts">
+            <div class="opts-title">Sección "Cuidado Infantil"</div>
+            <div class="opt-row"><span class="opt-dot">⏱️</span><div><span class="opt-text">Por horas</span><div class="opt-desc">Flexibilidad total: solo paga por lo que necesitas</div></div></div>
+            <div class="opt-row"><span class="opt-dot">📅</span><div><span class="opt-text">Mensualidad</span><div class="opt-desc">Servicio continuo con horario fijo y contrato mensual</div></div></div>
+            <div class="opts-title" style="margin-top:4px;">Sección "Contacto"</div>
+            <div class="opt-row"><span class="opt-dot">💬</span><div><span class="opt-text">Hablar con asesor</span><div class="opt-desc">¿No sabes qué opción elegir? Te ayudamos</div></div></div>
+            <div class="opt-row"><span class="opt-dot">↩️</span><div><span class="opt-text">Menú anterior</span></div></div>
+          </div>
+          <div class="badges">
+            <span class="ac aa">Agendar_Kangu_Porhoras</span>
+            <span class="ac aa">Agendar_Kangu_Mensualidad</span>
+            <span class="ac aa">Agendar_Kangu_Asesor</span>
+            <span class="ac aa">Agendar_TinMarin_Porhoras</span>
+            <span class="ac aa">Agendar_TinMarin_Mensualidad</span>
+          </div>
+        </div>
+        <div class="dn"></div>
+
+        <div class="nd cc" style="width:100%;">
+          <div class="nt">Formulario de cotización</div>
+          <div class="ns">Personalicemos tu cotización. Completa el formulario y nuestro equipo te contacta lo antes posible.</div>
+          <a class="lnk" href="https://forms.gle/eCojDJrfXR3rvf147">forms.gle/eCojDJrfXR3rvf147</a>
+        </div>
+        <div class="dn"></div>
+
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Cola comercial</div>
+          <div class="badges"><span class="sk s83">Skill 4083</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════ RAMA 2: SOY CLIENTE ════ -->
+    <div class="sep"></div>
+    <div class="sec">Rama 2 · Soy cliente</div>
+    <div class="row" style="align-items:flex-start;gap:6px;">
+
+      <div class="col" style="flex:1;">
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">Ingresa cédula del cliente</div>
+          <div class="ns">Número de documento sin comas, puntos ni caracteres especiales</div>
+          <div class="badges"><span class="ac ac2">Cliente_Cédula</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cp" style="width:100%;">
+          <div class="nt">Elige tu especialista de servicio</div>
+          <div class="ns">$cust_name, ¡Gracias! Para continuar, selecciona tu especialista:</div>
+          <div class="opts">
+            <div class="opts-title">Sección "Especialista de servicio"</div>
+            <div class="opt-row"><span class="opt-dot">👩</span><div><span class="opt-text">Carolina Torres</span></div></div>
+            <div class="opt-row"><span class="opt-dot">👩</span><div><span class="opt-text">Mónica Gallo</span></div></div>
+            <div class="opt-row"><span class="opt-dot">❓</span><div><span class="opt-text">Sin especialista</span><div class="opt-desc">Aún no cuento con especialista de servicio</div></div></div>
+            <div class="opt-row"><span class="opt-dot">↩️</span><div><span class="opt-text">Menú principal</span></div></div>
+          </div>
+          <div class="badges">
+            <span class="ac ac2">Cliente_AsesorDaniela</span>
+            <span class="ac ac2">Cliente_AsesorMonica</span>
+            <span class="ac ac2">Cliente_AsesorYesica</span>
+            <span class="ac ac2">Clientes_SinAsesor</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" style="flex:1;gap:4px;">
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Carolina Torres</div>
+          <div class="badges"><span class="sk s26">Skill 4126 · sub 12741</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Mónica Gallo</div>
+          <div class="badges"><span class="sk s28">Skill 4128 · sub 12992</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Sin especialista / Yésica</div>
+          <div class="badges"><span class="sk s83">Skill 4083</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════ RAMA 3: VER SERVICIOS ════ -->
+    <div class="sep"></div>
+    <div class="sec">Rama 3 · Ver servicios</div>
+    <div class="row" style="align-items:flex-start;gap:6px;">
+
+      <div class="col" style="flex:1;">
+        <div class="nd ct" style="width:100%;">
+          <div class="nt">Catálogos de servicios</div>
+          <div class="ns">$cust_name, aquí encuentras nuestros catálogos de servicios 😊 — Selecciona la opción que mejor se ajuste:</div>
+          <div class="opts">
+            <div class="opts-title">Sección "Catálogo de servicios"</div>
+            <div class="opt-row"><span class="opt-dot">📦</span><div><span class="opt-text">Todos los servicios</span><div class="opt-desc">Descubre todo lo que podemos hacer por ti y tu familia</div></div></div>
+            <div class="opt-row"><span class="opt-dot">👶</span><div><span class="opt-text">Cuidado infantil</span><div class="opt-desc">Servicio de niñeras por horas, mensualidad o recreación</div></div></div>
+            <div class="opt-row"><span class="opt-dot">🎓</span><div><span class="opt-text">Escuela de formación</span><div class="opt-desc">Asesorías, capacitaciones y programa técnico laboral</div></div></div>
+            <div class="opt-row"><span class="opt-dot">↩️</span><div><span class="opt-text">Menú principal</span></div></div>
+          </div>
+          <div class="badges">
+            <span class="ac as">Servicios_On_Todos</span>
+            <span class="ac as">Servicios_On_CuidadoInfantil</span>
+            <span class="ac as">Servicios_On_Escuela</span>
+          </div>
+          <div style="margin-top:4px;">
+            <a class="lnk" href="https://bit.ly/ServiciosKanguritos2026">bit.ly/ServiciosKanguritos2026</a>
+            <a class="lnk" href="https://bit.ly/CuidadoInfantilKanguritos2026">bit.ly/CuidadoInfantilKanguritos2026</a>
+            <a class="lnk" href="https://bit.ly/EscuelaKanguritos">bit.ly/EscuelaKanguritos</a>
+          </div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cp" style="width:100%;">
+          <div class="nt">¿Qué deseas hacer ahora?</div>
+          <div class="opts">
+            <div class="opt-row"><span class="opt-dot">💬</span><div><span class="opt-text">Hablar con asesor</span></div></div>
+            <div class="opt-row"><span class="opt-dot">📝</span><div><span class="opt-text">Cotizar servicio</span></div></div>
+            <div class="opt-row"><span class="opt-dot">↩️</span><div><span class="opt-text">Menú anterior</span></div></div>
+          </div>
+          <div class="badges">
+            <span class="ac as">Servicios_On_Todos_Asesor</span>
+            <span class="ac as">Servicios_On_Todos_Cotizar</span>
+            <span class="ac as">Servicios_On_Escuela_Asesor</span>
+            <span class="ac as">Servicios_On_Escuela_Cotizar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" style="flex:1;gap:4px;">
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Asesor servicios generales</div>
+          <div class="badges"><span class="sk s43">Skill 4043 · sub 12739</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cc" style="width:100%;">
+          <div class="nt">→ Cotización</div>
+          <a class="lnk" href="https://forms.gle/eCojDJrfXR3rvf147">forms.gle/eCojDJrfXR3rvf147</a>
+          <div class="badges"><span class="sk s28">Skill 4128</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Asesor Escuela Kangu</div>
+          <a class="lnk" href="https://bit.ly/EscuelaKanguritos">bit.ly/EscuelaKanguritos</a>
+          <div class="badges"><span class="sk s28">Skill 4128</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════ RAMA 4: SOY NIÑERA ════ -->
+    <div class="sep"></div>
+    <div class="sec">Rama 4 · Soy niñera</div>
+    <div class="row" style="align-items:flex-start;gap:6px;">
+
+      <!-- Kangurita activa -->
+      <div class="col" style="flex:1;">
+        <div class="nd cgr" style="width:100%;">
+          <div class="nt">Soy kangurita activa</div>
+          <div class="badges"><span class="ac ak">Ninera_Kangurita</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cgr" style="width:100%;">
+          <div class="nt">Cédula kangurita</div>
+          <div class="ns">Número de documento sin comas ni puntos</div>
+          <div class="badges"><span class="ac ak">Kangurita_Cedula</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cgr" style="width:100%;">
+          <div class="nt">Elige el área</div>
+          <div class="ns">$cust_name, aquí puedes comunicarte con el área correspondiente según tu necesidad:</div>
+          <div class="opts">
+            <div class="opts-title">Sección "Áreas de contacto"</div>
+            <div class="opt-row"><span class="opt-dot">👥</span><div><span class="opt-text">Gestión Humana</span><div class="opt-desc">Nómina, afiliaciones o inconsistencias</div></div></div>
+            <div class="opt-row"><span class="opt-dot">📆</span><div><span class="opt-text">Programación</span><div class="opt-desc">Postulación a servicios o dudas sobre servicios programados</div></div></div>
+            <div class="opt-row"><span class="opt-dot">💛</span><div><span class="opt-text">Bienestar</span><div class="opt-desc">Apoyo general o dudas sobre firma de contrato</div></div></div>
+            <div class="opt-row"><span class="opt-dot">💼</span><div><span class="opt-text">Trabajar en Kanguritos</span><div class="opt-desc">Quiero hacer parte del equipo</div></div></div>
+            <div class="opt-row"><span class="opt-dot">↩️</span><div><span class="opt-text">Menú anterior</span></div></div>
+          </div>
+          <div class="badges">
+            <span class="ac ak">Kangurita_GestionHumana</span>
+            <span class="ac ak">Kangurita_Programacion</span>
+            <span class="ac ak">kangurtia_Bienestar</span>
+          </div>
+        </div>
+        <div class="dn"></div>
+        <!-- Skills por área -->
+        <div class="row" style="gap:4px;">
+          <div class="col" style="flex:1;">
+            <div class="nd cb" style="width:100%;">
+              <div class="nt">→ Gestión Humana</div>
+              <div class="badges"><span class="sk s53">Skill 4253</span></div>
+            </div>
+          </div>
+          <div class="col" style="flex:1;">
+            <div class="nd cb" style="width:100%;">
+              <div class="nt">→ Programación</div>
+              <div class="badges"><span class="sk s53">Skill 4253</span></div>
+            </div>
+          </div>
+          <div class="col" style="flex:1;">
+            <div class="nd cb" style="width:100%;">
+              <div class="nt">→ Bienestar</div>
+              <div class="badges"><span class="sk s53">Skill 4253</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiere trabajar -->
+      <div class="col" style="flex:1;">
+        <div class="nd cgr" style="width:100%;">
+          <div class="nt">Quiero trabajar en Kangu</div>
+          <div class="ns">¡Únete a nuestro equipo! Perfiles: 23–51 años</div>
+          <div class="badges"><span class="ac ak">Ninera_Trabajar</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cgr" style="width:100%;">
+          <div class="nt">Mensaje con perfiles requeridos</div>
+          <div class="opts">
+            <div class="opts-title">Perfiles que buscamos</div>
+            <div class="opt-row"><span class="opt-dot">1️⃣</span><div><span class="opt-text">Perfil 1: Con título</span><div class="opt-desc">Título en primera infancia · mín. 2 años exp. docente o niñera</div></div></div>
+            <div class="opt-row"><span class="opt-dot">2️⃣</span><div><span class="opt-text">Perfil 2: Sin título</span><div class="opt-desc">Mín. 1 año exp. como niñera y labores domésticas</div></div></div>
+          </div>
+          <div class="ns" style="margin-top:5px;">📧 Aplica enviando tu hoja de vida a:</div>
+          <div style="font-size:9.5px;font-weight:700;color:#27500A;margin-top:2px;word-break:break-all;">hojasdevida@kanguritos.co</div>
+          <div class="badges" style="margin-top:4px;"><span class="ac ak">Sin transfer — respuesta directa por email</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════ RAMA 5: ESTUDIANTE ════ -->
+    <div class="sep"></div>
+    <div class="sec">Rama 5 · Estudio en Kangu</div>
+    <div class="row" style="align-items:flex-start;gap:6px;">
+
+      <div class="col" style="flex:1;">
+        <div class="nd cam" style="width:100%;">
+          <div class="nt">Ya estudio en Kangu</div>
+          <div class="badges">
+            <span class="ac ae">Estudiante_Estudiante</span>
+            <span class="ac ae">Estudiante_Cedula</span>
+          </div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Escuela Kangu</div>
+          <a class="lnk" href="https://bit.ly/EscuelaKanguritos">bit.ly/EscuelaKanguritos</a>
+          <div class="badges"><span class="sk s28">Skill 4128</span></div>
+        </div>
+      </div>
+
+      <div class="col" style="flex:1;">
+        <div class="nd cam" style="width:100%;">
+          <div class="nt">Quiero estudiar en Kangu</div>
+          <div class="ns">Información de programas y asesorías</div>
+          <div class="badges"><span class="ac ae">Estudiante_Estudiar</span></div>
+        </div>
+        <div class="dn"></div>
+        <div class="nd cb" style="width:100%;">
+          <div class="nt">→ Asesor escuela</div>
+          <a class="lnk" href="https://bit.ly/EscuelaKanguritos">bit.ly/EscuelaKanguritos</a>
+          <div class="badges"><span class="sk s28">Skill 4128</span></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /en horario -->
+</div><!-- /bifurcación horario -->
+
+<!-- ══════════ FLUJOS ESPECIALES ══════════ -->
+<div class="sep" style="margin-top:16px;"></div>
+<div class="sec">Intenciones especiales · saltan el menú principal</div>
+<div class="row" style="flex-wrap:wrap;gap:6px;align-items:flex-start;">
+
+  <div class="col" style="flex:1;min-width:140px;">
+    <div class="nd cpk" style="width:100%;">
+      <div class="nt">Campañas WhatsApp / Pauta</div>
+      <div class="ns">"vengo del anuncio / quiero más información"</div>
+      <div class="badges">
+        <span class="ac acamp">Campanas_Whatsapp</span>
+        <span class="ac acamp">Pauta_Digital</span>
+      </div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cb" style="width:100%;">
+      <div class="nt">→ Cola comercial</div>
+      <div class="badges"><span class="sk s83">Skill 4083</span></div>
+    </div>
+  </div>
+
+  <div class="col" style="flex:1;min-width:140px;">
+    <div class="nd cp" style="width:100%;">
+      <div class="nt">Seguimiento agente</div>
+      <div class="ns">"hablar con agente / no interesado / reenviar contrato"</div>
+      <div class="badges"><span class="ac acamp">Seguimiento_pipe_agente</span></div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cb" style="width:100%;">
+      <div class="nt">→ Cola comercial</div>
+      <div class="badges"><span class="sk s83">Skill 4083</span></div>
+    </div>
+  </div>
+
+  <div class="col" style="flex:1;min-width:140px;">
+    <div class="nd cgr" style="width:100%;">
+      <div class="nt">Seguimiento candidatas</div>
+      <div class="ns">"tengo duda de las pruebas"</div>
+      <div class="badges"><span class="ac acamp">Seguimiento_pipe_candidatas_agente</span></div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cb" style="width:100%;">
+      <div class="nt">→ Selección candidatas</div>
+      <div class="badges"><span class="sk s25">Skill 4225 · sub 12973</span></div>
+    </div>
+  </div>
+
+  <div class="col" style="flex:1;min-width:140px;">
+    <div class="nd cgr" style="width:100%;">
+      <div class="nt">Seguimiento kanguritas</div>
+      <div class="ns">"duda de documentos / contrato"</div>
+      <div class="badges"><span class="ac acamp">Seguimiento_pipe_kanguritas_agente</span></div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cb" style="width:100%;">
+      <div class="nt">→ Reclutamiento</div>
+      <div class="badges"><span class="sk s31">Skill 4131 · sub 12738</span></div>
+    </div>
+  </div>
+
+  <div class="col" style="flex:1;min-width:140px;">
+    <div class="nd cgr" style="width:100%;">
+      <div class="nt">Proceso selección</div>
+      <div class="ns">"los enviaré hoy / lo firmaré hoy"</div>
+      <div class="badges"><span class="ac acamp">Seguimiento_pipe_proceso_seleccion_respuesta</span></div>
+    </div>
+    <div class="dn"></div>
+    <div class="nd cb" style="width:100%;">
+      <div class="nt">→ Reclutamiento</div>
+      <div class="badges"><span class="sk s31">Skill 4131 · sub 12738</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ MAPA DE SKILLS ══════════ -->
+<div class="sep" style="margin-top:16px;"></div>
+<div class="sec">Mapa de skills — colas de atención Wolkvox</div>
+<div class="row" style="flex-wrap:wrap;gap:6px;justify-content:center;">
+  <div class="nd" style="background:#EEEDFE;border-color:#AFA9EC;min-width:150px;flex:1;">
+    <div class="nt" style="color:#3C3489;">Skill 4083 — Comercial</div>
+    <div class="ns" style="color:#534AB7;">Agendar · Mercadeo · Pauta · Referidos · Seguimiento agente · Sin especialista · Yésica</div>
+  </div>
+  <div class="nd" style="background:#E6F1FB;border-color:#85B7EB;min-width:150px;flex:1;">
+    <div class="nt" style="color:#0C447C;">Skill 4126 · sub 12741</div>
+    <div class="ns" style="color:#185FA5;">Asesora: Carolina Torres — Clientes activos asignados</div>
+  </div>
+  <div class="nd" style="background:#E1F5EE;border-color:#5DCAA5;min-width:150px;flex:1;">
+    <div class="nt" style="color:#085041;">Skill 4128 · sub 12992</div>
+    <div class="ns" style="color:#0F6E56;">Asesora: Mónica Gallo — Clientes · Cotización · Escuela · Estudiantes</div>
+  </div>
+  <div class="nd" style="background:#FAEEDA;border-color:#EF9F27;min-width:150px;flex:1;">
+    <div class="nt" style="color:#633806;">Skill 4046 — Fuera de horario</div>
+    <div class="ns" style="color:#854F0B;">Cotización off · Contacto posterior · Tin Marín off</div>
+  </div>
+  <div class="nd" style="background:#FAECE7;border-color:#F0997B;min-width:150px;flex:1;">
+    <div class="nt" style="color:#712B13;">Skill 4043 · sub 12739</div>
+    <div class="ns" style="color:#993C1D;">Servicios generales → asesor directo</div>
+  </div>
+  <div class="nd" style="background:#EAF3DE;border-color:#97C459;min-width:150px;flex:1;">
+    <div class="nt" style="color:#27500A;">Skill 4131 · sub 12738</div>
+    <div class="ns" style="color:#3B6D11;">Reclutamiento — Candidatas · Seguimiento kanguritas · Proceso selección</div>
+  </div>
+  <div class="nd" style="background:#F1EFE8;border-color:#B4B2A9;min-width:150px;flex:1;">
+    <div class="nt" style="color:#444441;">Skill 4225 · sub 12973</div>
+    <div class="ns" style="color:#5F5E5A;">Seguimiento candidatas — "tengo duda de las pruebas"</div>
+  </div>
+  <div class="nd" style="background:#FBEAF0;border-color:#ED93B1;min-width:150px;flex:1;">
+    <div class="nt" style="color:#4B1528;">Skill 4253</div>
+    <div class="ns" style="color:#72243E;">Kanguritas activas — Gestión Humana · Programación · Bienestar</div>
+  </div>
+</div>
+
+<!-- ══════════ LEYENDA ══════════ -->
+<div class="sep" style="margin-top:14px;"></div>
+<div class="sec">Leyenda</div>
+<div class="row" style="flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:8px;">
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#EEEDFE;border:0.5px solid #AFA9EC;display:inline-block;"></span>Bot / Detección</span>
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#E1F5EE;border:0.5px solid #5DCAA5;display:inline-block;"></span>Mensajes / Opciones</span>
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#FAECE7;border:0.5px solid #F0997B;display:inline-block;"></span>Acción clave / Formulario</span>
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#E6F1FB;border:0.5px solid #85B7EB;display:inline-block;"></span>Transfer a asesora</span>
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#EAF3DE;border:0.5px solid #97C459;display:inline-block;"></span>Niñeras / Candidatas</span>
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#FAEEDA;border:0.5px solid #EF9F27;display:inline-block;"></span>Fuera de horario / Escuela</span>
+  <span style="display:flex;align-items:center;gap:4px;font-size:10px;color:#555;"><span style="width:12px;height:12px;border-radius:3px;background:#FBEAF0;border:0.5px solid #ED93B1;display:inline-block;"></span>Campañas digitales</span>
+</div>
+<div class="row" style="flex-wrap:wrap;gap:4px;justify-content:center;">
+  <span class="ac acamp" style="font-size:9px;padding:2px 7px;">Campaña_* — Intención inicial / Pauta</span>
+  <span class="ac ah" style="font-size:9px;padding:2px 7px;">Horario_* / TDP_* — Filtros</span>
+  <span class="ac aa" style="font-size:9px;padding:2px 7px;">Agendar_* — Agendamiento</span>
+  <span class="ac ac2" style="font-size:9px;padding:2px 7px;">Cliente_* — Cliente activo</span>
+  <span class="ac as" style="font-size:9px;padding:2px 7px;">Servicios_* — Ver servicios</span>
+  <span class="ac ak" style="font-size:9px;padding:2px 7px;">Kangurita_* / Ninera_* — Niñeras</span>
+  <span class="ac ae" style="font-size:9px;padding:2px 7px;">Estudiante_* — Escuela</span>
+</div>
+
+<p style="font-size:9px;color:#bbb;text-align:center;margin-top:20px;">
+  Kanguritos — Flujo WhatsApp / Wolkvox · Versión Mayo 2026
+</p>
+
+</div><!-- /wrap -->
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL 3 · PIPEDRIVE
+     ══════════════════════════════════════ -->
+<div id="panel-pipedrive" class="panel">
+  <div class="sub-header sh-pipedrive">
+    <h2>Estructura CRM — Pipedrive</h2>
+    <p>11 pipelines · 69 etapas · Campos personalizados · Tipos de actividad · Haz clic en un pipeline para ver el detalle</p>
+  </div>
+  <div class="pd-wrap">
+  <div class="pd-sec" style="margin-bottom:8px;">Haz clic en un pipeline para ver sus etapas y campos</div>
+  <div class="pd-grid">
+    <button class="pipe-btn" onclick="showPipe('prospectos',this)"><div class="pipe-name">Prospectos</div><div class="pipe-meta">6 etapas · Pipeline 16</div></button>
+    <button class="pipe-btn" onclick="showPipe('logev',this)"><div class="pipe-name">Logística eventuales</div><div class="pipe-meta">3 etapas · Pipeline 10</div></button>
+    <button class="pipe-btn" onclick="showPipe('logmen',this)"><div class="pipe-name">Logística mensualidad / T. fijo</div><div class="pipe-meta">5 etapas · Pipeline 17</div></button>
+    <button class="pipe-btn" onclick="showPipe('pedagogia',this)"><div class="pipe-name">Pedagogía</div><div class="pipe-meta">9 etapas · Pipeline 4</div></button>
+    <button class="pipe-btn" onclick="showPipe('inactivos',this)"><div class="pipe-name">Clientes inactivos</div><div class="pipe-meta">1 etapa · Pipeline 5</div></button>
+    <button class="pipe-btn" onclick="showPipe('seleccion',this)"><div class="pipe-name">Proceso de selección</div><div class="pipe-meta">13 etapas · Pipeline 7</div></button>
+    <button class="pipe-btn" onclick="showPipe('kanguritas',this)"><div class="pipe-name">Kanguritas</div><div class="pipe-meta">11 etapas · Pipeline 8</div></button>
+    <button class="pipe-btn" onclick="showPipe('escuelav',this)"><div class="pipe-name">Escuela — Ventas</div><div class="pipe-meta">5 etapas · Pipeline 11</div></button>
+    <button class="pipe-btn" onclick="showPipe('escuelaop',this)"><div class="pipe-name">Escuela — Operación</div><div class="pipe-meta">7 etapas · Pipeline 14</div></button>
+    <button class="pipe-btn" onclick="showPipe('comercial',this)"><div class="pipe-name">Comercial</div><div class="pipe-meta">5 etapas · Pipeline 15</div></button>
+    <button class="pipe-btn" onclick="showPipe('pservicio',this)"><div class="pipe-name">P. Servicio — Kanguritas</div><div class="pipe-meta">4 etapas · Pipeline 20</div></button>
+  </div>
+
+  <div id="dp-prospectos" class="pd-detail">
+    <div class="det-header"><span class="det-title">Prospectos</span><span class="det-sub">Pipeline 16 · Embudo principal familias nuevas · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Prospecto</div><div class="stage"><span class="stage-num">02</span>Seguimiento prospecto</div><div class="stage"><span class="stage-num">03</span>Cotización</div><div class="stage"><span class="stage-num">04</span>Seguimiento cotización</div><div class="stage"><span class="stage-num">05</span>Contrato</div><div class="stage"><span class="stage-num">06</span>Seguimiento contrato</div></div>
+    <div class="pd-sep"></div><div class="pd-sec">Campos clave del deal</div>
+    <div class="fields-grid">
+      <div class="field-row"><span class="field-name">Línea de negocio</span><span class="field-type">enum · Kanguritos / Tinmarín</span></div>
+      <div class="field-row"><span class="field-name">Servicios</span><span class="field-type">set múltiple</span></div>
+      <div class="field-row"><span class="field-name">Ciudad</span><span class="field-type">enum · 6 ciudades</span></div>
+      <div class="field-row"><span class="field-name">Tipo de servicio</span><span class="field-type">enum · Fijo / Eventual</span></div>
+      <div class="field-row"><span class="field-name">Modalidad</span><span class="field-type">enum · 3h–9h día</span></div>
+      <div class="field-row"><span class="field-name">Cantidad de niños</span><span class="field-type">texto</span></div>
+      <div class="field-row"><span class="field-name">Edad(es) del(os) niño(s)</span><span class="field-type">set · por meses</span></div>
+      <div class="field-row"><span class="field-name">Fecha del servicio</span><span class="field-type">texto</span></div>
+      <div class="field-row"><span class="field-name">Horario del servicio</span><span class="field-type">texto</span></div>
+      <div class="field-row"><span class="field-name">Dirección del cliente</span><span class="field-type">dirección + lat/lng</span></div>
+      <div class="field-row"><span class="field-name">¿Cómo se enteró?</span><span class="field-type">enum · 8 fuentes</span></div>
+      <div class="field-row"><span class="field-name">Kangurita asignada</span><span class="field-type">texto</span></div>
+      <div class="field-row"><span class="field-name">Fecha final contrato</span><span class="field-type">texto</span></div>
+      <div class="field-row"><span class="field-name">Comentarios</span><span class="field-type">texto largo</span></div>
+    </div>
+    <div class="pd-sep"></div><div class="pd-sec">Razones de pérdida</div>
+    <div class="lost-reasons">
+      <div class="lr-item">Escuela — licenciatura en otra institución</div>
+      <div class="lr-item">Nos demoramos mucho en contactarlos y ya solucionó</div>
+      <div class="lr-item">Decidió iniciar con eventuales</div>
+      <div class="lr-item">Se sale del presupuesto</div>
+      <div class="lr-item">No contesta seguimientos</div>
+      <div class="lr-item">Se definió por la guardería</div>
+      <div class="lr-item">No envió contrato firmado</div>
+      <div class="lr-item">No está de acuerdo con las condiciones del contrato</div>
+    </div>
+  </div>
+  <div id="dp-logev" class="pd-detail">
+    <div class="det-header"><span class="det-title">Logística eventuales</span><span class="det-sub">Pipeline 10 · Turnos por horas · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Turno eventual confirmado</div><div class="stage"><span class="stage-num">02</span>Seguimiento pago eventual</div><div class="stage"><span class="stage-num">03</span>Programar turno eventual</div></div>
+    <div class="pd-sep"></div><div class="info-box">Recibe deals desde Prospectos (tipo Eventual). Gestiona programación y cobro del turno por horas.</div>
+  </div>
+  <div id="dp-logmen" class="pd-detail">
+    <div class="det-header"><span class="det-title">Logística mensualidad / T. fijo</span><span class="det-sub">Pipeline 17 · Contratos mensuales · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Mensu / T. fijo confirmado</div><div class="stage"><span class="stage-num">02</span>Entrevista</div><div class="stage"><span class="stage-num">03</span>Seguimiento entrevista</div><div class="stage"><span class="stage-num">04</span>Envío y seguimiento pago</div><div class="stage"><span class="stage-num">05</span>Programar mensu. / T. fijo</div></div>
+    <div class="pd-sep"></div><div class="info-box">Recibe desde Prospectos cuando el deal avanza a Contrato. Gestiona entrevista familia–kangurita, pago inicial y programación mensual.</div>
+  </div>
+  <div id="dp-pedagogia" class="pd-detail">
+    <div class="det-header"><span class="det-title">Pedagogía</span><span class="det-sub">Pipeline 4 · Seguimiento pedagógico de clientes activos · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>En adaptación</div><div class="stage"><span class="stage-num">02</span>Seg. fijo normal</div><div class="stage"><span class="stage-num">03</span>Alimentación</div><div class="stage"><span class="stage-num">04</span>Disciplina positiva</div><div class="stage"><span class="stage-num">05</span>Juego y desarrollo</div><div class="stage"><span class="stage-num">06</span>Rutinas</div><div class="stage"><span class="stage-num">07</span>Sueño</div><div class="stage"><span class="stage-num">08</span>Estimulación</div><div class="stage"><span class="stage-num">09</span>Cuidados recién nacido</div></div>
+    <div class="pd-sep"></div><div class="pd-sec">Actividades clave</div>
+    <div class="acts-grid"><div class="act"><span class="act-name">Sgto. mensual</span>Seguimiento mensual al cliente</div><div class="act"><span class="act-name">Mandar planeación</span>Envío de planeación pedagógica</div><div class="act"><span class="act-name">Encuesta temas</span>Temas de interés de la familia</div><div class="act"><span class="act-name">Cambio kangura</span>Reemplazo de niñera asignada</div><div class="act"><span class="act-name">Cambio mensualidad</span>Ajuste de tarifa o modalidad</div><div class="act"><span class="act-name">Extensión contrato</span>Renovación del contrato</div><div class="act"><span class="act-name">Terminación contrato</span>Cierre del servicio</div><div class="act"><span class="act-name">Cancelación por mora</span>Cancelación por no pago</div></div>
+  </div>
+  <div id="dp-inactivos" class="pd-detail">
+    <div class="det-header"><span class="det-title">Clientes inactivos</span><span class="det-sub">Pipeline 5 · Retención y reactivación · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Clientes inactivos</div></div>
+    <div class="pd-sep"></div><div class="info-box">Clientes que tuvieron un servicio y lo pausaron o terminaron. Pipeline de reactivación y seguimiento.</div>
+  </div>
+  <div id="dp-seleccion" class="pd-detail">
+    <div class="det-header"><span class="det-title">Proceso de selección</span><span class="det-sub">Pipeline 7 · Reclutamiento de candidatas · sin probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Aún no se necesita</div><div class="stage"><span class="stage-num">02</span>Candidatas</div><div class="stage"><span class="stage-num">03</span>En proceso</div><div class="stage"><span class="stage-num">04</span>Verificación Caro</div><div class="stage"><span class="stage-num">05</span>Cuida</div><div class="stage"><span class="stage-num">06</span>Cuida Caro</div><div class="stage"><span class="stage-num">07</span>Pendientes ingreso</div><div class="stage"><span class="stage-num">08</span>Exámenes de ingreso</div><div class="stage"><span class="stage-num">09</span>Verificación de referencias</div><div class="stage"><span class="stage-num">10</span>Seleccionadas — por inducción</div><div class="stage"><span class="stage-num">11</span>Formato perfil</div><div class="stage"><span class="stage-num">12</span>No pasan proceso</div><div class="stage"><span class="stage-num">13</span>No cumple requisitos</div></div>
+    <div class="pd-sep"></div><div class="pd-sec">Actividades clave</div>
+    <div class="acts-grid"><div class="act"><span class="act-name">Día de prueba</span>Evaluación práctica candidata</div><div class="act"><span class="act-name">Pruebas de ingreso</span>Exámenes del proceso</div><div class="act"><span class="act-name">Verificación de refs.</span>Referencias laborales</div><div class="act"><span class="act-name">Renuncia</span>Abandono del proceso</div><div class="act"><span class="act-name">Despido</span>Desvinculación</div></div>
+  </div>
+  <div id="dp-kanguritas" class="pd-detail">
+    <div class="det-header"><span class="det-title">Kanguritas</span><span class="det-sub">Pipeline 8 · Ciclo de vida de la niñera · sin probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Apr. Lectiva</div><div class="stage"><span class="stage-num">02</span>Apr. Productiva</div><div class="stage"><span class="stage-num">03</span>Vincular</div><div class="stage"><span class="stage-num">04</span>Afiliar</div><div class="stage"><span class="stage-num">05</span>Documentos</div><div class="stage"><span class="stage-num">06</span>Disponibles</div><div class="stage"><span class="stage-num">07</span>Activa — mensualidad</div><div class="stage"><span class="stage-num">08</span>Activa — turno fijo</div><div class="stage"><span class="stage-num">09</span>Firma contrato</div><div class="stage"><span class="stage-num">10</span>Liquidación pendiente</div><div class="stage"><span class="stage-num">11</span>Inactivas</div></div>
+    <div class="pd-sep"></div><div class="pd-sec">Actividades del ciclo de vida</div>
+    <div class="acts-grid"><div class="act"><span class="act-name">Vacaciones</span>Período de vacaciones</div><div class="act"><span class="act-name">Vacaciones dinero</span>Compensación en dinero</div><div class="act"><span class="act-name">Permiso</span>Ausencia temporal</div><div class="act"><span class="act-name">Incapacidad / calamidad</span>Baja médica o familiar</div><div class="act"><span class="act-name">Licencia de luto</span>Fallecimiento familiar</div><div class="act"><span class="act-name">Queda disponible</span>Finaliza servicio asignado</div><div class="act"><span class="act-name">Cambio kangura</span>Se reasigna a otro cliente</div><div class="act"><span class="act-name">Accidente</span>Incidente en servicio</div><div class="act"><span class="act-name">Renuncia</span>Retiro voluntario</div><div class="act"><span class="act-name">Despido</span>Desvinculación</div><div class="act"><span class="act-name">Terminación contrato</span>Fin del vínculo laboral</div></div>
+  </div>
+  <div id="dp-escuelav" class="pd-detail">
+    <div class="det-header"><span class="det-title">Escuela — Ventas</span><span class="det-sub">Pipeline 11 · Captación de estudiantes · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Campaña seguimiento</div><div class="stage"><span class="stage-num">02</span>Aspirante, presentación escuela</div><div class="stage"><span class="stage-num">03</span>Seguimientos</div><div class="stage"><span class="stage-num">04</span>Para próximo semestre</div><div class="stage"><span class="stage-num">05</span>Inactivo</div></div>
+    <div class="pd-sep"></div><div class="pd-sec">Campos específicos</div>
+    <div class="fields-grid"><div class="field-row"><span class="field-name">Programa al que se matricula</span><span class="field-type">set · Académico / Técnico Laboral</span></div><div class="field-row"><span class="field-name">Kangurita que lo refirió</span><span class="field-type">texto</span></div><div class="field-row"><span class="field-name">Nombre del acudiente</span><span class="field-type">texto (menores de 16)</span></div></div>
+  </div>
+  <div id="dp-escuelaop" class="pd-detail">
+    <div class="det-header"><span class="det-title">Escuela — Operación</span><span class="det-sub">Pipeline 14 · Seguimiento académico · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Inscripción + pago</div><div class="stage"><span class="stage-num">02</span>Matrícula</div><div class="stage"><span class="stage-num">03</span>1er semestre</div><div class="stage"><span class="stage-num">04</span>2do semestre</div><div class="stage"><span class="stage-num">05</span>3er semestre</div><div class="stage"><span class="stage-num">06</span>Certificado de aptitud</div><div class="stage"><span class="stage-num">07</span>Egresados</div></div>
+    <div class="pd-sep"></div><div class="pd-sec">Actividades</div>
+    <div class="acts-grid"><div class="act"><span class="act-name">Info programa</span>Información del programa</div><div class="act"><span class="act-name">Inscripción</span>Formalización de inscripción</div><div class="act"><span class="act-name">Duda programa</span>Consultas del estudiante</div><div class="act"><span class="act-name">No interesado</span>Descarte de escuela</div></div>
+  </div>
+  <div id="dp-comercial" class="pd-detail">
+    <div class="det-header"><span class="det-title">Comercial</span><span class="det-sub">Pipeline 15 · Negocios B2B / Alianzas · con probabilidad</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Nuevo contacto / seguimiento</div><div class="stage"><span class="stage-num">02</span>Prueba automatización</div><div class="stage"><span class="stage-num">03</span>Propuesta enviada / seguimiento</div><div class="stage"><span class="stage-num">04</span>Negocio concretado</div><div class="stage"><span class="stage-num">05</span>Inactivo</div></div>
+  </div>
+  <div id="dp-pservicio" class="pd-detail">
+    <div class="det-header"><span class="det-title">P. Servicio — Kanguritas</span><span class="det-sub">Pipeline 20 · Contratación formal · con probabilidad · creado abr 2026</span></div>
+    <div class="stages"><div class="stage"><span class="stage-num">01</span>Por contratar</div><div class="stage"><span class="stage-num">02</span>Firma contrato</div><div class="stage"><span class="stage-num">03</span>Verificar afiliaciones</div><div class="stage"><span class="stage-num">04</span>Contratista</div></div>
+    <div class="pd-sep"></div><div class="info-box">Pipeline nuevo (abr 2026). Gestiona contratación formal: firma, afiliaciones a seguridad social y vinculación como contratista.</div>
+  </div>
+
+  <div class="pd-sep" style="margin-top:16px;"></div>
+  <div class="pd-sec">Tipos de actividad globales en Pipedrive</div>
+  <div class="acts-grid">
+    <div class="act"><span class="act-name">Llamada</span>Contacto telefónico</div><div class="act"><span class="act-name">WhatsApp</span>Mensaje WA (custom)</div><div class="act"><span class="act-name">Seguimiento</span>Seguimiento general</div><div class="act"><span class="act-name">Tarea</span>Tarea interna</div><div class="act"><span class="act-name">Correo electrónico</span>Email</div><div class="act"><span class="act-name">Seguimientos Pros. Cotiz.</span>Prospectos en cotización</div><div class="act"><span class="act-name">Cambio mensualidad</span>Ajuste tarifa</div><div class="act"><span class="act-name">Permiso / Vacaciones</span>Ausencia kangurita</div><div class="act"><span class="act-name">Incapacidad / calamidad</span>Baja kangurita</div><div class="act"><span class="act-name">Renuncia / Despido</span>Desvinculación</div><div class="act"><span class="act-name">Terminación contrato</span>Cierre contrato</div><div class="act"><span class="act-name">Extensión contrato</span>Renovación</div><div class="act"><span class="act-name">Cambio kangura</span>Reasignación niñera</div><div class="act"><span class="act-name">Cancelación por mora</span>No pago</div><div class="act"><span class="act-name">Cambio kangura + congela</span>Cambio + pausa</div><div class="act"><span class="act-name">Sgto. mensual</span>Seguimiento mensual</div><div class="act"><span class="act-name">Mandar planeación</span>Envío pedagógico</div><div class="act"><span class="act-name">Encuesta temas</span>Temas familia</div><div class="act"><span class="act-name">Día de prueba</span>Evaluación candidata</div><div class="act"><span class="act-name">Accidente</span>Incidente en servicio</div><div class="act"><span class="act-name">Queda disponible</span>Niñera libre</div><div class="act"><span class="act-name">Vacaciones dinero</span>Compensación vacac.</div><div class="act"><span class="act-name">Licencia de luto</span>Duelo familiar</div>
+  </div>
+  <p class="foot">Kanguritos — Estructura Pipedrive · Versión Mayo 2026</p>
+  </div>
+</div>
+
+<script>
+const steps = {
+  s1:{title:'1 · Primer contacto',client:['Escribe al número de WhatsApp de Kanguritos','Puede llegar por pauta digital, referido con código, Google o redes sociales','El bot la saluda y solicita autorización de datos (TDP)','Si autoriza, accede al menú principal del bot'],team:['Wolkvox detecta la intención: pauta, referido o contacto orgánico','Registra código OPC-Menu: Campanas_Whatsapp, Pauta_Digital, etc.','Si es pauta: tag $pauta y transfer a Skill 4083 — cola comercial','La asesora recibe el chat con contexto de origen','Se crea o actualiza la persona en Pipedrive'],tools:['Wolkvox bot','WhatsApp','Pipedrive — crear persona']},
+  s2:{title:'2 · Exploración del servicio',client:['Navega el menú del bot y ve catálogos con links de servicios','Puede elegir tipo de servicio y modalidad en el bot','O puede pedir hablar directamente con una asesora'],team:['Si elige asesor directo: transfer inmediato a Skill 4083','Si navega el bot: registra $tipo_servicio y $modalidad antes del transfer','Asesora recibe el chat con variables ya guardadas','Se crea el deal en Prospectos, etapa Prospecto'],tools:['Wolkvox bot','WhatsApp','Pipedrive — etapa Prospecto']},
+  s3:{title:'3A · Cotización directa con asesora',client:['Habla directamente con la asesora por WhatsApp','La asesora le hace preguntas: fechas, horario, ciudad, edades, tipo de servicio','Recibe la cotización en el momento, en la misma conversación','Puede preguntar, pedir ajustes o aclarar dudas'],team:['La asesora recoge todos los datos en la conversación sin formulario','Calcula la tarifa según modalidad, horas/día y tipo de servicio','Comparte la cotización por WhatsApp de forma inmediata','Registra los datos en el deal de Pipedrive','Mueve el deal a etapa Cotización'],tools:['WhatsApp','Pipedrive — etapa Cotización']},
+  s3b:{title:'3B · Cotización vía formulario',client:['El bot envía el link del formulario de cotización','Completa: fechas, horario, cantidad y edades, dirección, cómo se enteró','Una vez enviado, la asesora le contacta con la cotización'],team:['Link: forms.gle/eCojDJrfXR3rvf147','Los datos llegan a Pipedrive por integración Make','Asesora completa campos del deal con la información recibida','Prepara la cotización y la envía por WhatsApp','Mueve el deal a etapa Cotización'],tools:['Google Forms','Make — integración','Pipedrive — campos personalizados','WhatsApp']},
+  s4:{title:'4 · Seguimiento de cotización',client:['Recibe la cotización y tiene tiempo de evaluarla','Puede preguntar, negociar o pedir tiempo','Si no está interesada puede decirlo y el proceso termina'],team:['Asesora mueve deal a etapa Seguimiento cotización','Registra actividades (tipo: Seguimientos Pros. Cotiz.)','Si hay inactividad: Wolkvox envía mensajes automáticos de seguimiento','Si se pierde: asesora marca razón de pérdida en Pipedrive'],tools:['Pipedrive — Seguimiento Cotización','Wolkvox — cierre por inactividad','WhatsApp']},
+  ev1:{title:'Ruta eventual · Confirmación del turno',client:['Acepta la tarifa cotizada para el turno por horas','Confirma fecha, hora y duración del servicio','No hay contrato escrito ni suscripción mensual'],team:['Asesora confirma disponibilidad de kangurita para esa fecha','Deal pasa a Logística Eventuales — Turno Eventual Confirmado','Se genera el link de pago por Wompi'],tools:['WhatsApp','Pipedrive — Logística Eventuales']},
+  ev2:{title:'Ruta eventual · Pago por Wompi',client:['Recibe el link de pago por WhatsApp','Paga con tarjeta débito o crédito a través de Wompi','No registra tarjeta para futuros cobros — cada turno paga por separado'],team:['Asesora envía link de pago generado en Wompi','Wompi procesa el pago','Al confirmar: deal pasa a etapa Seguimiento Pago Eventual','Se coordina la asignación de la kangurita disponible'],tools:['Wompi','Pipedrive — Seguimiento Pago Eventual','WhatsApp']},
+  ev3:{title:'Ruta eventual · Prestación del servicio',client:['La kangurita asignada llega en la fecha y hora acordadas','Se presta el turno según las horas contratadas','Sin período de adaptación ni seguimiento pedagógico extendido'],team:['Coordinadora asigna la kangurita disponible que mejor se ajuste','Deal pasa a etapa Programar Turno Eventual','Se confirma la asignación por WhatsApp'],tools:['Pipedrive — Programar Turno Eventual','WhatsApp']},
+  men1:{title:'Ruta mensualidad · Firma del contrato',client:['Recibe el contrato por WhatsApp o correo','Lo revisa, firma y lo devuelve','El contrato formaliza: horario, tarifa, kangurita y duración'],team:['Asesora genera el contrato según condiciones pactadas','Mueve deal a etapa Contrato en Pipedrive','Envía por WhatsApp y correo','Espera firma para avanzar a la coordinación de entrevistas'],tools:['Pipedrive — etapa Contrato','WhatsApp','Correo']},
+  men2:{title:'Ruta mensualidad · Entrevista con kanguritas',client:['Coordinadora le presenta 1 o 2 kanguritas disponibles','La familia tiene la entrevista (presencial o virtual)','Evalúa: afinidad, experiencia, disponibilidad','Elige la kangurita con la que quiere trabajar'],team:['Deal pasa a Logística Mensualidad — etapa Entrevista','Coordinadora busca kanguritas en pipeline Kanguritas (Disponibles)','Registra el nombre de la kangurita elegida en campo Kangurita asignada','Si no hay match: busca otra candidata disponible'],tools:['Pipedrive — Logística Mensualidad · Entrevista','Pipedrive — Kanguritas · Disponibles','WhatsApp']},
+  men3:{title:'Ruta mensualidad · Pago y suscripción Treli',client:['Una vez aprobada la kangurita, recibe el link de pago','Paga la primera mensualidad anticipada con tarjeta','Su tarjeta queda registrada para débito automático mensual','Recibe confirmación y bienvenida'],team:['Asesora genera link de pago a través de Wompi / Treli','Wompi procesa el primer pago','Treli registra la tarjeta para cobros automáticos futuros','Asesora marca deal como Ganado en Pipedrive'],tools:['Wompi','Treli — suscripción y débito automático','Pipedrive — deal Ganado']},
+  men4:{title:'Ruta mensualidad · Inicio del servicio',client:['La kangurita aprobada comienza en la fecha acordada','La familia entra en período de adaptación (aprox. 2–4 semanas)','Kanguritos hace seguimiento cercano durante la adaptación'],team:['Deal pasa a Programar Mensu / T. fijo en Logística','Pedagogía crea deal en pipeline Pedagogía — En adaptación','Se programa la primera planeación pedagógica','Se activa seguimiento mensual'],tools:['Pipedrive — Logística Mensualidad · Programar','Pipedrive — Pedagogía · En adaptación','WhatsApp']},
+  esc1:{title:'Ruta escuela · Exploración del programa',client:['Ve la información de la Escuela en los links del bot','Puede elegir: Técnica Laboral, asesorías, capacitaciones o recreación','Siempre pasa a hablar con la asesora — no hay cotización automática'],team:['Bot envía link: bit.ly/EscuelaKanguritos','Transfer a Skill 4128 (Asesora Escuela / Mónica Gallo)','Asesora recibe el chat con el servicio de escuela como contexto'],tools:['Wolkvox — Skill 4128','WhatsApp','bit.ly/EscuelaKanguritos']},
+  esc2:{title:'Ruta escuela · Cotización con asesora',client:['La asesora le explica los programas disponibles','Recibe precios, fechas, modalidad y requisitos','Puede hacer preguntas y aclarar dudas en la conversación'],team:['Asesora cotiza según el programa: técnica laboral, capacitación, asesoría o recreación','Crea deal en pipeline Escuela Ventas','Mueve a etapa Aspirante o Seguimientos'],tools:['WhatsApp','Pipedrive — Escuela Ventas']},
+  esc3:{title:'Ruta escuela · Pago e inscripción',client:['Acepta las condiciones y realiza el pago','Sin débito automático ni suscripción','Recibe confirmación de inscripción'],team:['Asesora envía link de pago por Wompi','Al confirmar: deal pasa a pipeline Escuela Operación — Inscripción + pago'],tools:['Wompi','Pipedrive — Escuela Operación']},
+  esc4:{title:'Ruta escuela · Prestación del servicio',client:['Inicia el programa, asesoría, capacitación o evento de recreación','Para técnica laboral: ciclo semestral hasta certificación'],team:['Deal avanza por etapas de Escuela Operación','Técnica: 1er sem → 2do sem → 3er sem → Certificado → Egresado'],tools:['Pipedrive — Escuela Operación','WhatsApp']}
+};
+
+function sd(id){
+  const s=steps[id]; if(!s) return;
+  document.getElementById('dp-title').textContent=s.title;
+  document.getElementById('dp-client').innerHTML=s.client.map(t=>`<div class="dp-item"><div class="dp-dot"></div><span>${t}</span></div>`).join('');
+  document.getElementById('dp-team').innerHTML=s.team.map(t=>`<div class="dp-item"><div class="dp-dot"></div><span>${t}</span></div>`).join('');
+  document.getElementById('dp-tools').innerHTML=s.tools.map(t=>`<span class="tool">${t}</span>`).join('');
+  const panel=document.getElementById('detail');
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.querySelectorAll('#panel-comercial .card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#panel-comercial .card').forEach(c=>{if(c.getAttribute('onclick')===`sd('${id}')`)c.classList.add('active');});
+}
+
+function switchTab(tab,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+function showPipe(id,btn){
+  document.querySelectorAll('.pd-detail').forEach(d=>d.classList.remove('show'));
+  document.querySelectorAll('.pipe-btn').forEach(b=>b.classList.remove('active'));
+  const det=document.getElementById('dp-'+id);
+  if(det){det.classList.add('show');btn.classList.add('active');}
+}
+</script>
+</body>
+</html>
